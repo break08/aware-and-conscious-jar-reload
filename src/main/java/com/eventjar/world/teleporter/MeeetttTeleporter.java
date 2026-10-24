@@ -1,14 +1,8 @@
 
 package com.eventjar.world.teleporter;
 
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.common.util.ITeleporter;
 
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.portal.PortalInfo;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,18 +26,25 @@ import java.util.function.Function;
 import java.util.Optional;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+import static com.eventjar.Eventjar.MODID;
+
+@EventBusSubscriber(modid = MODID)
 public class MeeetttTeleporter implements ITeleporter {
 	public static final TicketType<BlockPos> CUSTOM_PORTAL = TicketType.create("meeettt_portal", Vec3i::compareTo, 300);
 	public static Holder<PoiType> poi = null;
 
 	@SubscribeEvent
 	public static void registerPointOfInterest(RegisterEvent event) {
-		event.register(ForgeRegistries.Keys.POI_TYPES, registerHelper -> {
+		event.register(Registries.POINT_OF_INTEREST_TYPE, registerHelper -> {
 			PoiType poiType = new PoiType(ImmutableSet.copyOf(EventjarModBlocks.MEEETTT_PORTAL.get().getStateDefinition().getPossibleStates()), 0, 1);
 			registerHelper.register("meeettt_portal", poiType);
-			poi = ForgeRegistries.POI_TYPES.getHolder(poiType).get();
+			poi = Registries.POINT_OF_INTEREST_TYPE.(poiType).get();
 		});
 	}
 
@@ -60,7 +61,7 @@ public class MeeetttTeleporter implements ITeleporter {
 	/* failed to load code for net.minecraft.world.level.portal.PortalForcer */
 	@Override
 	public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel server, float yaw, Function<Boolean, Entity> repositionEntity) {
-		PortalInfo portalinfo = getPortalInfo(entity, server);
+		DimensionTransition portalinfo = getPortalInfo(entity, server);
 		if (entity instanceof ServerPlayer player) {
 			player.setServerLevel(server);
 			server.addDuringPortalTeleport(player);
@@ -80,7 +81,7 @@ public class MeeetttTeleporter implements ITeleporter {
 		}
 	}
 
-	private PortalInfo getPortalInfo(Entity entity, ServerLevel server) {
+	private DimensionTransition getPortalInfo(Entity entity, ServerLevel server) {
 		WorldBorder worldborder = server.getWorldBorder();
 		double d0 = DimensionType.getTeleportationScale(entity.level().dimensionType(), server.dimensionType());
 		BlockPos blockpos1 = worldborder.clampToBounds(entity.getX() * d0, entity.getY(), entity.getZ() * d0);
@@ -97,7 +98,7 @@ public class MeeetttTeleporter implements ITeleporter {
 				vector3d = new Vec3(0.5, 0, 0);
 			}
 			return MeeetttPortalShape.createPortalInfo(server, repositioner, direction$axis, vector3d, entity, entity.getDeltaMovement(), entity.getYRot(), entity.getXRot());
-		}).orElse(new PortalInfo(entity.position(), Vec3.ZERO, entity.getYRot(), entity.getXRot()));
+		}).orElse(new DimensionTransition(server, entity.position(), Vec3.ZERO, entity.getYRot(), entity.getXRot()));
 	}
 
 	protected Optional<BlockUtil.FoundRectangle> getExitPortal(Entity entity, BlockPos pos, WorldBorder worldBorder) {

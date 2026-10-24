@@ -2,12 +2,12 @@
 package com.eventjar.world.teleporter;
 
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.BlockUtil;
@@ -61,11 +61,11 @@ public class MeeetttPortalShape {
 		double d0 = axis == Direction.Axis.X ? 2.0 : 3.0;
 		double d1 = axis == Direction.Axis.X ? 3.0 : 2.0;
 		double d2 = entityPos.get(axis) - portal.minCorner.get(axis);
-		double d3 = entitySize.width / 2.0D;
+		double d3 = entitySize.width() / 2.0D;
 		return new Vec3(d2 / d0 - 0.5D, 0.0D, d3 / d1);
 	}
 
-	public static PortalInfo createPortalInfo(ServerLevel server, BlockUtil.FoundRectangle portal, Direction.Axis axis, Vec3 relativePos, Entity entity, Vec3 velocity, float yRot, float xRot) {
+	public static DimensionTransition createPortalInfo(ServerLevel server, BlockUtil.FoundRectangle portal, Direction.Axis axis, Vec3 relativePos, Entity entity, Vec3 velocity, float yRot, float xRot) {
 		BlockPos blockpos = portal.minCorner;
 		BlockState blockstate = server.getBlockState(blockpos);
 		Direction.Axis direction$axis = blockstate.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS).orElse(Direction.Axis.X);
@@ -77,7 +77,7 @@ public class MeeetttPortalShape {
 		double d2 = d0 - (double) entity.getBbWidth();
 		double d3 = d1 - (double) entity.getBbHeight();
 		BlockPos blockpos1 = blockpos.relative(direction$axis, (int)(d2 / 2.0D + 0.5D));
-		return new PortalInfo(new Vec3((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D + d3 * relativePos.y(), (double) blockpos1.getZ() + 0.5D), vector3d, yRot + (float) i, xRot);
+		return new DimensionTransition(server, new Vec3((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D + d3 * relativePos.y(), (double) blockpos1.getZ() + 0.5D), vector3d, yRot + (float) i, xRot);
 	}
 
 	private BlockPos calculateBottomLeft(BlockPos pos) {
