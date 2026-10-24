@@ -1,8 +1,6 @@
 
 package com.eventjar.world.inventory;
 
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.Level;
@@ -17,6 +15,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
 
 import com.eventjar.init.EventjarModMenus;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.function.Supplier;
 import java.util.Map;

@@ -1,7 +1,6 @@
 package com.eventjar.world.teleporter;
 
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;

@@ -1,0 +1,19 @@
+package com.eventjar.procedures;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import com.eventjar.client.gui.GlitchScree;
+
+public class GlitchEffectProcedure {
+    public static void execute() {
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.screen != null) {
+            minecraft.setScreen(null);
+        }
+
+        RenderSystem.recordRenderCall(() -> {
+            minecraft.setScreen(new GlitchScree());
+        });
+    }
+}

@@ -1,5 +1,6 @@
 package com.eventjar.world.dimension;
 
+import com.eventjar.procedures.WierdKoghdaIghrokPieriekhoditVIzmierieniieProcedure;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;

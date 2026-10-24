@@ -1,8 +1,7 @@
 
 package com.eventjar.world.inventory;
 
-
-
+import com.eventjar.init.EventjarModMenus;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
